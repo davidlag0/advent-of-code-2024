@@ -1,0 +1,18 @@
+[package]
+name = "advent-of-code-2024"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "aoc_rust_2024"
+path = "src/main.rs"
+
+[lib]
+name = "aoc_rust_2024"
+path = "src/lib.rs"
+
+[dependencies]
+clap = { version = "4.0.29", features = ["derive"] }
+env_logger = "0.11.3"
+log = "0.4.21"
+regex = "1.7.0"

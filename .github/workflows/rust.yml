@@ -1,0 +1,59 @@
+name: Rust CI
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '**.md'
+  pull_request:
+    branches: [ main ]
+    paths-ignore:
+      - '**.md'
+
+env:
+  RUST_TOOLCHAIN: stable
+  TOOLCHAIN_PROFILE: minimal
+
+jobs:
+  lints:
+    name: Run cargo fmt and cargo clippy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+      - name: Install toolchain
+        run: rustup toolchain install ${{ env.RUST_TOOLCHAIN }} --profile ${{ env.TOOLCHAIN_PROFILE }} -c rustfmt -c clippy
+      - name: Cache
+        uses: Swatinem/rust-cache@v2
+      - name: Check formatting
+        run: cargo fmt --all -- --check
+      - name: Linting
+        run: cargo clippy --all-targets -- -D warnings
+
+  test:
+    name: Run cargo test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+      - name: Install toolchain
+        run: rustup toolchain install ${{ env.RUST_TOOLCHAIN }} --profile ${{ env.TOOLCHAIN_PROFILE }} -c rustfmt -c clippy
+      - name: Cache
+        uses: Swatinem/rust-cache@v2
+      - name: Run tests
+        run: cargo test
+
+  codecov:
+    name: Report code coverage
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout sources
+      uses: actions/checkout@v4
+    - name: Install toolchain
+      run: rustup toolchain install nightly --profile ${{ env.TOOLCHAIN_PROFILE }} -c llvm-tools-preview
+    - name: Calculate code coverage (Runs cargo with defaults flags, using the default `lcov` output)
+      uses: Swatinem/fucov@v1
+    - name: Upload code coverage report to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        directory: coverage
