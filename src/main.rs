@@ -6,6 +6,7 @@ use std::path::PathBuf;
 use std::time::Instant;
 
 mod day1;
+mod day2;
 
 #[derive(Parser)]
 #[command(name = "advent-of-code-2024")]
@@ -43,6 +44,8 @@ fn solve(day: u8, part: u8) -> Result<SolverFn, (u8, u8)> {
     match (day, part) {
         (1, 1) => Ok(day1::part1),
         (1, 2) => Ok(day1::part2),
+        (2, 1) => Ok(day2::part1),
+        (2, 2) => Ok(day2::part2),
         (_, _) => Err((day, part)),
     }
 }
