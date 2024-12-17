@@ -8,6 +8,7 @@ use std::time::Instant;
 mod day1;
 mod day2;
 mod day3;
+mod day4;
 
 #[derive(Parser)]
 #[command(name = "advent-of-code-2024")]
@@ -49,6 +50,8 @@ fn solve(day: u8, part: u8) -> Result<SolverFn, (u8, u8)> {
         (2, 2) => Ok(day2::part2),
         (3, 1) => Ok(day3::part1),
         (3, 2) => Ok(day3::part2),
+        (4, 1) => Ok(day4::part1),
+        (4, 2) => Ok(day4::part2),
         (_, _) => Err((day, part)),
     }
 }
