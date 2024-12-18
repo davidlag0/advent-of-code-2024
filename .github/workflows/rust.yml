@@ -46,6 +46,8 @@ jobs:
   codecov:
     name: Report code coverage
     runs-on: ubuntu-latest
+    env:
+      RUST_TOOLCHAIN: nightly
     steps:
     - name: Checkout sources
       uses: actions/checkout@v4
