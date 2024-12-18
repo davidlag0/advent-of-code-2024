@@ -46,14 +46,20 @@ jobs:
   codecov:
     name: Report code coverage
     runs-on: ubuntu-latest
+    env:
+      RUST_TOOLCHAIN: nightly
+      CARGO_TERM_COLOR: always
     steps:
     - name: Checkout sources
       uses: actions/checkout@v4
     - name: Install toolchain
-      run: rustup toolchain install nightly --profile ${{ env.TOOLCHAIN_PROFILE }} -c llvm-tools-preview
-    - name: Calculate code coverage (Runs cargo with defaults flags, using the default `lcov` output)
-      uses: Swatinem/fucov@v1
+      run: rustup update ${{ env.RUST_TOOLCHAIN }}
+    - name: Install cargo-llvm-cov
+      uses: taiki-e/install-action@cargo-llvm-cov
+    - name: Generate code coverage
+      run: cargo +nightly llvm-cov --all-features --workspace --codecov --branch --output-path codecov.json
     - name: Upload code coverage report to Codecov
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v5
       with:
-        directory: coverage
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: codecov.json
